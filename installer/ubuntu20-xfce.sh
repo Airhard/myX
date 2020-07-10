@@ -99,9 +99,15 @@ rm $tarball
 
 
 #DE installation addition
-
+echo "install xfce"
 wget --tries=20 $dlink/xfce19.sh -O $folder/root/xfce19.sh
 clear
+echo "install airPack"
+wget --tries=20 $dlink/awesome.sh -O /root/awesome.sh
+bash ~/awesome.sh
+echo "install vscode"
+wget --tries=20 $dlink/vscode_patch.sh -O /root/vscode_patch.sh
+bash ~/vscode_patch.sh
 echo "Setting up the installation of XFCE VNC"
 
 echo "APT::Acquire::Retries \"3\";" > $folder/etc/apt/apt.conf.d/80-retries #Setting APT retry count
@@ -117,6 +123,13 @@ if [ ! -f /root/xfce19.sh ]; then
     bash ~/xfce19.sh
 else
     bash ~/xfce19.sh
+fi
+clear
+if [ ! -f /root/awesome.sh ]; then
+    wget --tries=20 $dlink2/awesome.sh -O /root/awesome.sh
+    bash ~/awesome.sh
+else
+    bash ~/awesome.sh
 fi
 clear
 if [ ! -f /usr/local/bin/vncserver-start ]; then

@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 folder=ubuntu20-fs
-dlink="https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/APT"
+dlink="https://raw.githubusercontent.com/Airhard/myX/master/scripts"
 if [ -d "$folder" ]; then
 	first=1
 	echo "skipping downloading"
@@ -18,11 +18,11 @@ if [ "$first" != 1 ];then
 		amd64)
 			archurl="amd64" ;;
 		x86_64)
-			archurl="amd64" ;;	
+			archurl="amd64" ;;
 		*)
 			echo "unknown architecture"; exit 1 ;;
 		esac
-		wget "https://github.com/AndronixApp/AndronixOrigin/raw/master/Rootfs/Ubuntu20/focal-${archurl}.tar.gz" -O $tarball
+		wget "https://github.com/Airhard/myX/raw/master/root-fs/focal-${archurl}.tar.gz" -O $tarball
 
 fi
 	cur=`pwd`
@@ -54,7 +54,7 @@ command+=" -b /proc"
 command+=" -b ubuntu20-fs/root:/dev/shm"
 ## uncomment the following line to have access to the home directory of termux
 #command+=" -b /data/data/com.termux/files/home:/root"
-## uncomment the following line to mount /sdcard directly to / 
+## uncomment the following line to mount /sdcard directly to /
 #command+=" -b /sdcard"
 command+=" -w /root"
 command+=" /usr/bin/env -i"
@@ -74,20 +74,21 @@ EOM
 mkdir -p ubuntu20-fs/var/tmp
 rm -rf ubuntu20-fs/usr/local/bin/*
 echo "127.0.0.1 localhost localhost" > $folder/etc/hosts
-wget -q https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Rootfs/Ubuntu19/.profile -O ubuntu20-fs/root/.profile.1 > /dev/null
+script_src="https://raw.githubusercontent.com/Airhard/myX/master/ubuntu"
+wget -q $script_src/.profile -O ubuntu20-fs/root/.profile.1 > /dev/null
 cat $folder/root/.profile.1 >> $folder/root/.profile && rm -rf $folder/root/.profile.1
-wget -q https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Rootfs/Ubuntu19/.bash_profile-ub19 -O ubuntu20-fs/root/.bash_profile > /dev/null
-wget -q https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Rootfs/Ubuntu19/vnc -P ubuntu20-fs/usr/local/bin > /dev/null
-wget -q https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Rootfs/Ubuntu19/vncpasswd -P ubuntu20-fs/usr/local/bin > /dev/null
-wget -q https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Rootfs/Ubuntu19/vncserver-stop -P ubuntu20-fs/usr/local/bin > /dev/null
-wget -q https://raw.githubusercontent.com/AndronixApp/AndronixOrigin/master/Rootfs/Ubuntu19/vncserver-start -P ubuntu20-fs/usr/local/bin > /dev/null
+wget -q $script_src/.bash_profile -O $folder/root/.bash_profile > /dev/null
+wget -q $script_src/vnc -P $folder/usr/local/bin > /dev/null
+wget -q $script_src/vncpasswd -P $folder/usr/local/bin > /dev/null
+wget -q $script_src/vncserver-stop -P $folder/usr/local/bin > /dev/null
+wget -q $script_src/vncserver-start -P $folder/usr/local/bin > /dev/null
 
-chmod +x ubuntu20-fs/root/.bash_profile
-chmod +x ubuntu20-fs/root/.profile
-chmod +x ubuntu20-fs/usr/local/bin/vnc
-chmod +x ubuntu20-fs/usr/local/bin/vncpasswd
-chmod +x ubuntu20-fs/usr/local/bin/vncserver-start
-chmod +x ubuntu20-fs/usr/local/bin/vncserver-stop
+chmod +x $folder/root/.bash_profile
+chmod +x $folder/root/.profile
+chmod +x $folder/usr/local/bin/vnc
+chmod +x $folder/usr/local/bin/vncpasswd
+chmod +x $folder/usr/local/bin/vncserver-start
+chmod +x $folder/usr/local/bin/vncserver-stop
 
 echo "fixing shebang of $bin"
 termux-fix-shebang $bin
@@ -99,7 +100,7 @@ rm $tarball
 
 #DE installation addition
 
-wget --tries=20 $dlink/XFCE4/xfce19.sh -O $folder/root/xfce19.sh
+wget --tries=20 $dlink/xfce19.sh -O $folder/root/xfce19.sh
 clear
 echo "Setting up the installation of XFCE VNC"
 
@@ -112,15 +113,15 @@ mkdir -p ~/.vnc
 apt update -y && apt install sudo dialog wget -y > /dev/null
 clear
 if [ ! -f /root/xfce19.sh ]; then
-    wget --tries=20 $dlink/XFCE4/xfce19.sh -O /root/xfce19.sh
+    wget --tries=20 $dlink/xfce19.sh -O /root/xfce19.sh
     bash ~/xfce19.sh
 else
     bash ~/xfce19.sh
 fi
 clear
 if [ ! -f /usr/local/bin/vncserver-start ]; then
-    wget --tries=20  $dlink/XFCE4/vncserver-start -O /usr/local/bin/vncserver-start 
-    wget --tries=20 $dlink/XFCE4/vncserver-stop -O /usr/local/bin/vncserver-stop
+    wget --tries=20  $dlink/vncserver-start -O /usr/local/bin/vncserver-start
+    wget --tries=20 $dlink/vncserver-stop -O /usr/local/bin/vncserver-stop
     chmod +x /usr/local/bin/vncserver-stop
     chmod +x /usr/local/bin/vncserver-start
 fi
@@ -128,6 +129,6 @@ if [ ! -f /usr/bin/vncserver ]; then
     apt install tigervnc-standalone-server -y
 fi
 rm -rf /root/xfce19.sh
-rm -rf ~/.bash_profile" > $folder/root/.bash_profile 
+rm -rf ~/.bash_profile" > $folder/root/.bash_profile
 
 bash $bin

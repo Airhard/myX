@@ -78,6 +78,7 @@ script_src="https://raw.githubusercontent.com/Airhard/myX/master/ubuntu"
 wget -q $script_src/.profile -O ubuntu20-fs/root/.profile.1 > /dev/null
 cat $folder/root/.profile.1 >> $folder/root/.profile && rm -rf $folder/root/.profile.1
 wget -q $script_src/.bash_profile -O $folder/root/.bash_profile > /dev/null
+wget -q $script_src/.bashrc -O $folder/root/.bashrc > /dev/null
 wget -q $script_src/vnc -P $folder/usr/local/bin > /dev/null
 wget -q $script_src/vncpasswd -P $folder/usr/local/bin > /dev/null
 wget -q $script_src/vncserver-stop -P $folder/usr/local/bin > /dev/null
@@ -126,7 +127,7 @@ else
 fi
 clear
 if [ ! -f /root/awesome.sh ]; then
-    wget --tries=20 $dlink2/awesome.sh -O /root/awesome.sh
+    wget --tries=20 $dlink/awesome.sh -O /root/awesome.sh
     bash ~/awesome.sh
 else
     bash ~/awesome.sh
